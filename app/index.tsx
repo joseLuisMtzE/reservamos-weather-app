@@ -1,41 +1,29 @@
 // app/searchScreen.tsx
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, View, Text, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router"; // Link para regresar
+import { useRouter } from "expo-router";
 import { Searchbar } from "react-native-paper";
-import axios from "axios";
+import { fetchLocations } from "../src/api/locationsApi";
+import { Location } from "../src/types/locationTypes";
 
 export default function SearchScreen() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
-  const [xdTimeout, setXdTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const fetchResults = async (searchText: string) => {
-    // if (debounceTimeout) {
-    //   clearTimeout(xdTimeout);
-    // }
     setLoading(true);
     if (!searchText) {
       setResults([]);
       return;
     }
-    console.log(searchText);
-    // setXdTimeout(
-    //   setTimeout(() => {
-    //     setLoading(false);
-    //   }, 4000)
-    // );
-
     try {
-      const response = await axios.get(
-        `https://search.reservamos.mx/api/v2/places?q=${searchText}`
-      );
-      setResults(response.data); // Ajusta esto según la respuesta de tu API
+      const response = await fetchLocations(searchText);
+      setResults(response); // Ajusta esto según la respuesta de tu API
     } catch (error) {
       console.error("Error fetching results:", error);
     } finally {
@@ -43,54 +31,83 @@ export default function SearchScreen() {
     }
   };
 
-  // Manejador del cambio en el input con debounce manual
   const handleSearch = (text: string) => {
     setQuery(text);
-    if (text === "") return;
+    if (text === "") {
+      setResults([]);
+      return;
+    }
 
-    // Limpiar el timeout anterior
     if (debounceTimeout) {
       setLoading(false);
 
       clearTimeout(debounceTimeout);
     }
 
-    // Crear un nuevo timeout para ejecutar la búsqueda después de 500ms
     const newTimeout = setTimeout(() => {
       fetchResults(text);
     }, 500);
 
     setDebounceTimeout(newTimeout);
   };
+
+  const clearSearch = () => {
+    setResults([]);
+    handleSearch("");
+  };
+
+  const SearchItem = ({ item }: { item: Location }) => (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      className="flex-row p-4 gap-2 items-center border-b border-b-gray-300"
+      onPress={() => console.log(item.lat, item.long)}
+    >
+      <Text className="text-lg font-bold w-auto">
+        {item.display.toUpperCase()}
+      </Text>
+      <Text ellipsizeMode="tail">
+        {item.city_name}
+        {item.state ? `, ${item.state}` : ""}
+        {item.country ? `, ${item.country}` : ""}
+      </Text>
+    </TouchableOpacity>
+  );
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {/* <View style={{ flex: 1, padding: 16 }}> */}
+    <View className="flex-1 justify-center items-center p-4 bg-white gap-4">
       <Searchbar
+        autoFocus
+        style={{ backgroundColor: "#f2f2f2" }}
         placeholder="Buscar..."
         value={query}
         onChangeText={handleSearch}
         autoCapitalize="none"
         loading={loading}
+        onClearIconPress={clearSearch}
       />
 
-      {loading && <Text style={{ marginTop: 10 }}>Buscando...</Text>}
+      {loading ? (
+        <Text style={{ marginTop: 10 }}>Buscando...</Text>
+      ) : (
+        <>
+          {results.length === 0 ? (
+            <Text style={{ marginTop: 10 }}>Sin coincidencias</Text>
+          ) : null}
+        </>
+      )}
 
       <FlatList
+        className="w-full"
         data={results}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }: any) => (
-          <TouchableOpacity
-            className="flex-row p-4 gap-2 items-center"
-            onPress={() => console.log(item, item.lat, item.long)}
-          >
-            <Text className="text-lg font-bold">{item.display}</Text>
-            <Text>{item.city_name}</Text>
-            <Text>{item.state}</Text>
-            <Text>{item.country}</Text>
-          </TouchableOpacity>
+        keyExtractor={(_, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }: { item: Location }) => (
+          <SearchItem item={item} />
         )}
+        contentContainerStyle={{
+          backgroundColor: "#f2f2f2",
+          borderRadius: 16,
+        }}
       />
-      {/* </View> */}
     </View>
   );
 }
