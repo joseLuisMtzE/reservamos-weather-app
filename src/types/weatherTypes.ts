@@ -46,3 +46,38 @@ export interface Forecast {
   wind: Wind;
   visibility: number;
 }
+
+export interface CurrentWeather {
+  clouds: Clouds;
+  dt: number;
+  id: number;
+  main: CurrentWeatherMain;
+  visibility: number;
+  weather: WeatherElement[];
+  wind: Wind;
+}
+
+export interface CurrentWeatherMain {
+  feels_like: number;
+  humidity: number;
+  pressure: number;
+  temp: number;
+  temp_max: number;
+  temp_min: number;
+}
+
+export interface Wind {
+  deg: number;
+  speed: number;
+}
+
+export const weatherTranslationMap: { [key: string]: string } = {
+  feels_like: "Sensación térmica",
+  grnd_level: "Nivel del suelo",
+  humidity: "Humedad",
+  pressure: "Presión",
+  sea_level: "Nivel del mar",
+  temp: "Temperatura",
+  temp_max: "Temperatura máxima",
+  temp_min: "Temperatura mínima",
+};

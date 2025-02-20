@@ -1,4 +1,3 @@
-// app/searchScreen.tsx
 import React, { useState } from "react";
 import { FlatList, View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
@@ -66,6 +65,10 @@ export default function SearchScreen() {
           params: {
             lat: item.lat,
             long: item.long,
+            display: item.display,
+            country: item.country,
+            state: item.state,
+            city_name: item.city_name,
           },
         })
       }
