@@ -1,14 +1,35 @@
 // app/windex.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, FlatList } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ForecastItem, MeasureItem } from "../src/components";
 import { StatusBar } from "expo-status-bar";
+import { fetchWeather } from "../src/api/weatherApi";
 
 export default function DetailScreen() {
-  const { lat, long } = useLocalSearchParams(); // Obtén los parámetros
+  const { lat, long } = useLocalSearchParams();
 
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      if (!lat || !long) {
+        // setError('Latitude or Longitude is missing');
+        // setLoading(false);
+        return;
+      }
+
+      try {
+        await fetchWeather(lat.toString(), long.toString());
+        // setWeatherData(data); // Almacena los datos obtenidos
+      } catch (err) {
+        // setError('Error fetching weather data');
+      } finally {
+        // setLoading(false); // Ya hemos terminado de cargar, ocultamos el loading
+      }
+    };
+
+    fetchWeatherData();
+  }, [lat, long]);
   console.log(lat, long);
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center justify-start px-4 pt-10 flex-col gap-8">

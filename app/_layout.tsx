@@ -1,6 +1,6 @@
 // app/_layout.tsx
 import React from "react";
-import { Stack } from "expo-router"; // Esto importa el stack de Expo Router
+import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import "../global.css";
 

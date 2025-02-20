@@ -10,7 +10,7 @@ export enum ResultType {
 }
 
 export interface Location {
-  id: number;
+  id?: number;
   display: string;
   city_name: string;
   state: string;
