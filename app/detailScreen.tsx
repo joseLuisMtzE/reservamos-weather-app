@@ -1,19 +1,18 @@
 // app/windex.tsx
 import React from "react";
 import { View, Text, FlatList } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ForecastItem, MeasureItem } from "../src/components";
 import { StatusBar } from "expo-status-bar";
 
 export default function DetailScreen() {
-  const router = useRouter();
+  const { lat, long } = useLocalSearchParams(); // Obtén los parámetros
+
+  console.log(lat, long);
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center justify-start px-4 pt-10 flex-col gap-8">
       <StatusBar />
-      {/* <View className="w-full ">
-          <Searchbar value={""} />
-        </View> */}
       <View className="gap-4 w-full">
         <View className=" flex-col justify-center items-center ">
           <View className="flex-row justify-center">

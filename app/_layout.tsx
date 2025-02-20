@@ -7,10 +7,13 @@ import "../global.css";
 const Layout = () => {
   return (
     <PaperProvider>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
           name="detailScreen"
-          options={{ title: "Pantalla de Detalles" }}
+          options={{
+            headerShown: false,
+          }}
         />
       </Stack>
     </PaperProvider>

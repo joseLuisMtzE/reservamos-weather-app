@@ -23,7 +23,7 @@ export default function SearchScreen() {
     }
     try {
       const response = await fetchLocations(searchText);
-      setResults(response); // Ajusta esto según la respuesta de tu API
+      setResults(response);
     } catch (error) {
       console.error("Error fetching results:", error);
     } finally {
@@ -59,10 +59,18 @@ export default function SearchScreen() {
   const SearchItem = ({ item }: { item: Location }) => (
     <TouchableOpacity
       activeOpacity={0.7}
-      className="flex-row p-4 gap-2 items-center border-b border-b-gray-300"
-      onPress={() => console.log(item.lat, item.long)}
+      className="flex-row  p-4 gap-2 items-center border-b border-b-gray-300"
+      onPress={() =>
+        router.push({
+          pathname: "/detailScreen",
+          params: {
+            lat: item.lat,
+            long: item.long,
+          },
+        })
+      }
     >
-      <Text className="text-lg font-bold w-auto">
+      <Text className="text-base font-bold " numberOfLines={1}>
         {item.display.toUpperCase()}
       </Text>
       <Text ellipsizeMode="tail">
