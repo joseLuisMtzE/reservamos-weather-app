@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ForecastItem, MeasureItem } from "./components";
+import { ForecastItem, MeasureItem } from "../src/components";
 import { PaperProvider, Searchbar } from "react-native-paper";
 
 export default function App() {
