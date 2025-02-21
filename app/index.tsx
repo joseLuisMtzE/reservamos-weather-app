@@ -107,7 +107,7 @@ export default function SearchScreen() {
       )}
 
       <FlatList
-        className="w-full"
+        className="w-full rounded-2xl"
         data={results}
         keyExtractor={(_, index) => index.toString()}
         showsVerticalScrollIndicator={false}
@@ -117,6 +117,7 @@ export default function SearchScreen() {
         contentContainerStyle={{
           backgroundColor: "#f2f2f2",
           borderRadius: 16,
+          overflow: "hidden",
         }}
       />
     </View>
