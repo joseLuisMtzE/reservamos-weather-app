@@ -12,7 +12,7 @@ type ForecastItemProps = {
 
 export default function index({ item }: ForecastItemProps) {
   return (
-    <View className="w-[70px] h-[98px] bg-white rounded-2xl px-4 py-2 flex-col justify-between items-center shadow-sm shadow-black">
+    <View className="w-[70px] h-[98px] bg-blue-200 rounded-2xl px-4 py-2 flex-col justify-between items-center shadow-sm shadow-black ">
       <Text className="text-base font-bold">
         {new Date(item.dt * 1000).toLocaleDateString("es-MX", {
           weekday: "short",
@@ -20,9 +20,9 @@ export default function index({ item }: ForecastItemProps) {
       </Text>
 
       <Image
-        className="w-10 h-10  "
+        className="w-14 h-8  "
         source={{ uri: item.icon }}
-        resizeMode="contain"
+        resizeMode="cover"
       />
       <View className="flex-row gap-0.5">
         <Text className="">{item.temp_max.toFixed(0)}°</Text>

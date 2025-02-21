@@ -10,7 +10,7 @@ import {
 } from "../src/api/weatherApi";
 import { CurrentWeather, Forecast } from "../src/types/weatherTypes";
 import { mapWeatherDataToSpanish } from "../src/api/mappers/weatherMappers";
-import { Icon, IconButton } from "react-native-paper";
+import { ActivityIndicator, Icon, IconButton } from "react-native-paper";
 
 export default function DetailScreen() {
   const router = useRouter();
@@ -40,7 +40,8 @@ export default function DetailScreen() {
         );
         setWeatherData(data);
       } catch (err) {
-        // setError('Error fetching weather data');
+        console.error(err);
+        router.back();
       } finally {
         setLoading(false);
       }
@@ -79,96 +80,97 @@ export default function DetailScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-900 items-center justify-start px-4 flex-col gap-8">
+    <SafeAreaView className="flex-1 bg-blue-900">
       <StatusBar />
-      <View className="w-full justify-start">
-        <IconButton
-          className="p-0 m-0"
-          icon={"arrow-left"}
-          size={24}
-          iconColor="white"
-          onPress={() => router.back()}
-        />
-      </View>
+
       {loading ? (
-        <View>
-          <Text className="text-white">Cargando</Text>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size={40} color="white" />
         </View>
       ) : (
         <>
-          <View className="gap-4 w-full">
-            <View className=" flex-col justify-center items-center ">
-              <View className="flex-row justify-center">
-                <Text className="text-[90px] text-white leading-[90px]">
-                  {currentWeatherData?.main.temp.toFixed(0)}
-                </Text>
-                <Text className="text-base top-2 text-white leading-[16px]">
-                  °C
-                </Text>
-              </View>
-              <Text className="text-white leading-[16px] ">
-                {`Max ${currentWeatherData?.main.temp_max.toFixed(
-                  0
-                )}° / Min ${currentWeatherData?.main.temp_min.toFixed(0)}°`}
-              </Text>
-            </View>
-            <View className="flex-row gap-1 justify-center items-center ">
-              <View className="justify-center items-center">
-                <Image
-                  className="w-10 h-10  "
-                  source={{ uri: currentWeatherData?.weather[0].icon }}
-                  resizeMode="contain"
-                />
-              </View>
-
-              <Text className="text-white">
-                {currentWeatherData?.weather[0].description}
-              </Text>
-            </View>
-            <View className="flex-col justify-center items-center">
-              <Text className="text-white font-bold text-2xl">{display}</Text>
-              <Text className="text-white">
-                {city_name}
-                {state ? `, ${state}` : ""}
-                {country ? `, ${country}` : ""}
-              </Text>
-            </View>
-          </View>
-
-          <View className="w-full flex-col gap-1 items-center ">
-            <Text className="text-white text-lg font-bold ">
-              Pronostico de 5 dias
-            </Text>
-
-            <FlatList
-              className="p-2 bg-black/20 rounded-2xl w-full"
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              data={dailyForecast}
-              renderItem={({ item }) => <ForecastItem item={item} />}
-              contentContainerStyle={{ gap: 8, paddingEnd: 16 }}
+          <View className="w-full justify-start  ">
+            <IconButton
+              icon={"arrow-left"}
+              iconColor="white"
+              onPress={() => router.back()}
             />
           </View>
+          <View className=" items-center justify-start px-4   flex-col gap-8">
+            <View className="gap-4 w-full">
+              <View className=" flex-col justify-center items-center ">
+                <View className="flex-row justify-center">
+                  <Text className="text-[90px] text-white leading-[90px]">
+                    {currentWeatherData?.main.temp.toFixed(0)}
+                  </Text>
+                  <Text className="text-base top-2 text-white leading-[16px]">
+                    °C
+                  </Text>
+                </View>
+                <Text className="text-white leading-[16px] ">
+                  {`Max ${currentWeatherData?.main.temp_max.toFixed(
+                    0
+                  )}° / Min ${currentWeatherData?.main.temp_min.toFixed(0)}°`}
+                </Text>
+              </View>
+              <View className="flex-row  justify-center items-center ">
+                <View className="justify-center items-center">
+                  <Image
+                    className="w-14 h-8  "
+                    source={{ uri: currentWeatherData?.weather[0].icon }}
+                    resizeMode="cover"
+                  />
+                </View>
 
-          <View className="w-full bg-black/20 rounded-2xl py-4 flex-col gap-4">
-            <View className=" justify-center items-center">
+                <Text className="text-white">
+                  {currentWeatherData?.weather[0].description}
+                </Text>
+              </View>
+              <View className="flex-col justify-center items-center">
+                <Text className="text-white font-bold text-2xl">{display}</Text>
+                <Text className="text-white">
+                  {city_name}
+                  {state ? `, ${state}` : ""}
+                  {country ? `, ${country}` : ""}
+                </Text>
+              </View>
+            </View>
+
+            <View className="w-full flex-col gap-1 items-center ">
               <Text className="text-white text-lg font-bold ">
-                Mediciones de hoy
+                Pronostico de 5 dias
               </Text>
+
+              <FlatList
+                className="p-2 bg-black/20 rounded-2xl w-full"
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={dailyForecast}
+                renderItem={({ item }) => <ForecastItem item={item} />}
+                contentContainerStyle={{ gap: 8, paddingEnd: 16 }}
+              />
             </View>
-            <FlatList
-              data={
-                currentWeatherData
-                  ? mapWeatherDataToSpanish(currentWeatherData?.main)
-                  : []
-              }
-              renderItem={({ item }) => <MeasureItem item={item} />}
-              numColumns={3}
-              columnWrapperStyle={{
-                justifyContent: "space-evenly",
-              }}
-              contentContainerStyle={{ gap: 16 }}
-            />
+
+            <View className="w-full bg-black/20 rounded-2xl py-4 flex-col gap-4">
+              <View className=" justify-center items-center">
+                <Text className="text-white text-lg font-bold ">
+                  Mediciones de hoy
+                </Text>
+              </View>
+              <FlatList
+                data={
+                  currentWeatherData
+                    ? mapWeatherDataToSpanish(currentWeatherData?.main)
+                    : []
+                }
+                renderItem={({ item }) => <MeasureItem item={item} />}
+                numColumns={3}
+                columnWrapperStyle={{
+                  justifyContent: "space-evenly",
+                }}
+                contentContainerStyle={{ gap: 16 }}
+              />
+            </View>
           </View>
         </>
       )}

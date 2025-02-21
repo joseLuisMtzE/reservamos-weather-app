@@ -6,14 +6,9 @@ import "../global.css";
 const Layout = () => {
   return (
     <PaperProvider>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="detailScreen"
-          options={{
-            headerShown: false,
-          }}
-        />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="detailScreen" />
       </Stack>
     </PaperProvider>
   );

@@ -8,7 +8,7 @@ type ForecastItemProps = {
 };
 export default function index({ item }: ForecastItemProps) {
   return (
-    <View className="flex-col w-[100px] h-[80px] px-2 py-4 bg-white justify-between items-center rounded-2xl">
+    <View className="flex-col w-[100px] h-[90px] px-2 py-3 bg-white justify-between items-center rounded-2xl">
       <Text className=" text-center text-blue-950/80 font-bold">
         {item.label}
       </Text>

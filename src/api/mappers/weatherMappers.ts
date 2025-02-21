@@ -27,7 +27,7 @@ export const mapDescriptionEnum = (description: string): Description =>
   descriptionMap[description] || Description.ClearSky;
 
 export const mapIconImage = (icon: string) => {
-  return `https://openweathermap.org/img/wn/${icon}@2x.png`;
+  return `https://openweathermap.org/img/wn/${icon.replace("n", "d")}@2x.png`;
 };
 
 export const forecastDataMapper = (item: any): Forecast => ({
