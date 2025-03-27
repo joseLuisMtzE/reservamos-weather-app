@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Image, ScrollView } from "react-native";
+import { View, Text, FlatList, Image, ScrollView, StyleSheet } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ForecastItem, MeasureItem } from "../src/components";
@@ -81,7 +81,7 @@ export default function DetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <StatusBar />
+      <StatusBar style="light" />
 
       {loading ? (
         <View className="flex-1 justify-center items-center">
@@ -89,14 +89,17 @@ export default function DetailScreen() {
         </View>
       ) : (
         <>
-          <View className="w-full justify-start  ">
+          <View className="w-full flex-row items-center px-4 py-2 absolute top-16 left-0 z-10">
             <IconButton
-              icon={"arrow-left"}
+              icon="arrow-left"
               iconColor="white"
+              size={24}
               onPress={() => router.back()}
+              className="bg-white/10 rounded-full"
             />
           </View>
-          <View className=" items-center justify-start px-4   flex-col gap-8">
+          <View className="flex-1 px-4">
+          <View className=" items-center justify-start px-4 mt-10  flex-col gap-8">
             <View className="gap-4 w-full">
               <View className=" flex-col justify-center items-center ">
                 <View className="flex-row justify-center">
@@ -136,27 +139,25 @@ export default function DetailScreen() {
               </View>
             </View>
 
-            <View className="w-full flex-col gap-1 items-center ">
-              <Text className="text-white text-lg font-bold ">
-                Pronostico de 5 dias
+            <View className="w-full">
+              <Text className="text-white text-xl font-bold mb-4">
+                Pronóstico de 5 días
               </Text>
 
               <FlatList
-                className="p-2 bg-black/20 rounded-2xl w-full"
+                className="bg-white/10 rounded-2xl p-4"
                 showsHorizontalScrollIndicator={false}
                 horizontal
                 data={dailyForecast}
                 renderItem={({ item }) => <ForecastItem item={item} />}
-                contentContainerStyle={{ gap: 8, paddingEnd: 16 }}
+                contentContainerStyle={{ gap: 12, paddingEnd: 16 }}
               />
             </View>
 
-            <View className="w-full bg-black/20 rounded-2xl py-4 flex-col gap-4">
-              <View className=" justify-center items-center">
-                <Text className="text-white text-lg font-bold ">
-                  Mediciones de hoy
-                </Text>
-              </View>
+            <View className="w-full bg-white/10 rounded-2xl py-4 mb-8">
+              <Text className="text-white text-xl font-bold mb-4 text-center">
+                Mediciones de hoy
+              </Text>
               <FlatList
                 data={
                   currentWeatherData
@@ -171,6 +172,9 @@ export default function DetailScreen() {
                 contentContainerStyle={{ gap: 16 }}
               />
             </View>
+            </View>
+          
+            
           </View>
         </>
       )}
